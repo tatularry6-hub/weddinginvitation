@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP - Tatsuya & Mao</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+
+  body{
+    font-family:'Shippori Mincho','EB Garamond',serif;
+    background:#EDE6D8;
+    color:#2E2620;
+    line-height:1.8;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* grain */
+  body::before{
+    content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+    opacity:0.04;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:128px 128px;
+  }
+
+  body::after{
+    content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
+    background:radial-gradient(ellipse at center, transparent 50%, rgba(62,50,38,0.08) 100%);
+  }
+
+  .page{
+    max-width:520px;margin:0 auto;
+    padding:3rem 1.5rem 4rem;
+    position:relative;
+  }
+
+  /* Header */
+  .header{
+    text-align:center;
+    padding-bottom:2.5rem;
+    border-bottom:1px solid rgba(74,64,54,0.1);
+    margin-bottom:2.5rem;
+  }
+
+  .header-title{
+    font-family:'EB Garamond',serif;
+    font-size:clamp(0.6rem,1vw,0.7rem);
+    letter-spacing:0.45em;text-transform:uppercase;
+    color:rgba(46,38,32,0.52);font-weight:400;
+    margin-bottom:0.8rem;
+  }
+
+  .header-names{
+    font-family:'EB Garamond',serif;
+    font-size:clamp(1.4rem,4vw,2rem);
+    font-weight:400;letter-spacing:0.1em;color:#2E2620;
+  }
+
+  .header-amp{
+    font-style:italic;opacity:0.3;margin:0 0.1em;font-size:0.8em;
+  }
+
+  .header-sub{
+    font-size:0.8rem;color:rgba(46,38,32,0.62);
+    margin-top:0.8rem;letter-spacing:0.05em;
+  }
+
+  /* Form */
+  .form-section{margin-bottom:2rem}
+
+  .form-label{
+    display:block;
+    font-size:0.78rem;
+    letter-spacing:0.08em;
+    color:rgba(46,38,32,0.75);
+    margin-bottom:0.5rem;
+    font-weight:500;
+  }
+
+  .form-label .required{
+    font-size:0.6rem;
+    background:rgba(74,64,54,0.12);
+    color:rgba(46,38,32,0.75);
+    padding:0.15em 0.5em;
+    border-radius:2px;
+    margin-left:0.5em;
+    letter-spacing:0.05em;
+    vertical-align:middle;
+  }
+
+  .form-note{
+    font-size:0.72rem;
+    color:rgba(46,38,32,0.58);
+    margin-top:0.3rem;
+    letter-spacing:0.02em;
+  }
+
+  /* Radio buttons */
+  .radio-group{
+    display:flex;gap:0;
+    border:1px solid rgba(74,64,54,0.15);
+    border-radius:4px;overflow:hidden;
+  }
+
+  .radio-group label{
+    flex:1;text-align:center;
+    padding:0.8rem 0;
+    font-size:0.85rem;
+    letter-spacing:0.08em;
+    cursor:pointer;
+    transition:all 0.3s ease;
+    color:rgba(46,38,32,0.68);
+    border-right:1px solid rgba(74,64,54,0.1);
+    position:relative;
+  }
+
+  .radio-group label:last-child{border-right:none}
+
+  .radio-group input{
+    position:absolute;opacity:0;pointer-events:none;
+  }
+
+  .radio-group input:checked + span{
+    color:#2E2620;font-weight:500;
+  }
+
+  .radio-group label:has(input:checked){
+    background:rgba(74,64,54,0.07);
+  }
+
+  /* Text inputs */
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  select,
+  textarea{
+    width:100%;
+    padding:0.75rem 0.9rem;
+    border:1px solid rgba(74,64,54,0.15);
+    border-radius:4px;
+    background:rgba(255,255,255,0.4);
+    font-family:'Shippori Mincho',serif;
+    font-size:0.88rem;
+    color:#2E2620;
+    outline:none;
+    transition:border-color 0.3s ease;
+    -webkit-appearance:none;
+  }
+
+  input:focus, select:focus, textarea:focus{
+    border-color:rgba(46,38,32,0.52);
+  }
+
+  ::placeholder{color:rgba(46,38,32,0.4);font-size:0.82rem}
+
+  textarea{
+    min-height:100px;resize:vertical;line-height:1.8;
+  }
+
+  select{
+    cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234A4036' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 0.8rem center;
+    padding-right:2.5rem;
+  }
+
+  /* Inline fields */
+  .field-row{
+    display:flex;gap:0.8rem;
+  }
+
+  .field-row > *{flex:1}
+
+  /* Companion add */
+  .companion-list{margin-top:0.5rem}
+
+  .companion-row{
+    display:flex;gap:0.5rem;align-items:center;
+    margin-bottom:0.5rem;
+  }
+
+  .companion-row input{flex:1}
+
+  .btn-remove{
+    width:28px;height:28px;
+    border:1px solid rgba(74,64,54,0.15);
+    border-radius:50%;
+    background:transparent;
+    color:rgba(46,38,32,0.52);
+    cursor:pointer;font-size:1rem;
+    display:flex;align-items:center;justify-content:center;
+    transition:all 0.3s ease;
+    flex-shrink:0;
+  }
+  .btn-remove:hover{border-color:rgba(46,38,32,0.48);color:rgba(46,38,32,0.75)}
+
+  .btn-add{
+    display:inline-block;margin-top:0.3rem;
+    font-size:0.75rem;color:rgba(46,38,32,0.62);
+    cursor:pointer;letter-spacing:0.05em;
+    border:none;background:none;
+    font-family:'Shippori Mincho',serif;
+    transition:color 0.3s ease;
+  }
+  .btn-add:hover{color:rgba(46,38,32,0.85)}
+
+  /* Submit */
+  .submit-wrap{
+    text-align:center;
+    margin-top:3rem;
+    padding-top:2rem;
+    border-top:1px solid rgba(74,64,54,0.08);
+  }
+
+  .submit-btn{
+    display:inline-block;
+    padding:1rem 4rem;
+    border:1px solid rgba(46,38,32,0.4);
+    color:rgba(46,38,32,0.88);
+    font-family:'EB Garamond',serif;
+    font-size:0.85rem;letter-spacing:0.3em;
+    text-transform:uppercase;
+    background:transparent;cursor:pointer;
+    transition:all 0.5s cubic-bezier(0.22,1,0.36,1);
+    position:relative;overflow:hidden;
+  }
+
+  .submit-btn::before{
+    content:'';position:absolute;inset:0;
+    background:rgba(74,64,54,0.08);
+    transform:scaleX(0);transform-origin:left;
+    transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);z-index:0;
+  }
+  .submit-btn:hover::before{transform:scaleX(1)}
+  .submit-btn span{position:relative;z-index:1}
+  .submit-btn:hover{border-color:rgba(46,38,32,0.58);color:#2E2620}
+
+  /* Back link */
+  .back-link{
+    display:block;text-align:center;
+    margin-top:1.5rem;
+    font-size:0.75rem;color:rgba(46,38,32,0.52);
+    text-decoration:none;letter-spacing:0.1em;
+    transition:color 0.3s ease;
+  }
+  .back-link:hover{color:rgba(46,38,32,0.75)}
+
+  /* Confirmation overlay */
+  .confirm-overlay{
+    display:none;
+    position:fixed;inset:0;z-index:10000;
+    background:rgba(237,230,216,0.95);
+    align-items:center;justify-content:center;
+    flex-direction:column;text-align:center;
+    padding:2rem;
+  }
+
+  .confirm-overlay.show{display:flex}
+
+  .confirm-icon{
+    width:48px;height:48px;
+    border:1.5px solid rgba(74,64,54,0.2);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:1.5rem;
+  }
+
+  .confirm-icon svg{width:20px;height:20px;stroke:rgba(46,38,32,0.68)}
+
+  .confirm-title{
+    font-family:'EB Garamond',serif;
+    font-size:1.2rem;letter-spacing:0.1em;color:#2E2620;
+    margin-bottom:0.8rem;
+  }
+
+  .confirm-text{
+    font-size:0.85rem;color:rgba(46,38,32,0.72);
+    line-height:2;letter-spacing:0.04em;
+  }
+
+  .confirm-back{
+    margin-top:2rem;
+    font-size:0.75rem;color:rgba(46,38,32,0.52);
+    text-decoration:none;letter-spacing:0.1em;
+    transition:color 0.3s ease;
+  }
+  .confirm-back:hover{color:rgba(46,38,32,0.75)}
+
+  @media(max-width:480px){
+    .field-row{flex-direction:column;gap:0.5rem}
+  }
+</style>
+</head>
+<body>
+
+  <div class="page">
+
+    <!-- Header -->
+    <div class="header">
+      <p class="header-title">RSVP</p>
+      <p class="header-names">Tatsuya <span class="header-amp">&</span> Mao</p>
+      <p class="header-sub">2026年6月6日（土）｜綱町三井倶楽部</p>
+    </div>
+
+    <form id="rsvpForm">
+
+      <!-- 出欠 -->
+      <div class="form-section">
+        <label class="form-label">ご出欠 <span class="required">必須</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="attendance" value="attend" required><span>ご出席</span></label>
+          <label><input type="radio" name="attendance" value="absent"><span>ご欠席</span></label>
+        </div>
+      </div>
+
+      <!-- お名前 -->
+      <div class="form-section">
+        <label class="form-label">お名前 <span class="required">必須</span></label>
+        <div class="field-row">
+          <input type="text" name="last_name" placeholder="姓" required>
+          <input type="text" name="first_name" placeholder="名" required>
+        </div>
+      </div>
+
+      <!-- ふりがな -->
+      <div class="form-section">
+        <label class="form-label">ふりがな <span class="required">必須</span></label>
+        <div class="field-row">
+          <input type="text" name="last_name_kana" placeholder="せい" required>
+          <input type="text" name="first_name_kana" placeholder="めい" required>
+        </div>
+      </div>
+
+      <!-- ご連名 -->
+      <div class="form-section">
+        <label class="form-label">ご連名</label>
+        <p class="form-note">ご同伴の方がいらっしゃる場合はご入力ください（4名まで）</p>
+        <div class="companion-list" id="companionList"></div>
+        <button type="button" class="btn-add" id="addCompanion">＋ ご連名を追加する</button>
+      </div>
+
+      <!-- 新郎/新婦ゲスト -->
+      <div class="form-section">
+        <label class="form-label">いずれかをお選びください <span class="required">必須</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="side" value="groom" required><span>新郎ゲスト</span></label>
+          <label><input type="radio" name="side" value="bride"><span>新婦ゲスト</span></label>
+        </div>
+      </div>
+
+      <!-- 電話番号 -->
+      <div class="form-section">
+        <label class="form-label">電話番号 <span class="required">必須</span></label>
+        <input type="tel" name="phone" placeholder="09000000000" required>
+      </div>
+
+      <!-- メールアドレス -->
+      <div class="form-section">
+        <label class="form-label">メールアドレス <span class="required">必須</span></label>
+        <input type="email" name="email" placeholder="example@email.com" required>
+      </div>
+
+      <!-- 郵便番号・住所 -->
+      <div class="form-section">
+        <label class="form-label">郵便番号</label>
+        <input type="text" name="zipcode" id="zipcode" placeholder="000-0000" style="max-width:180px">
+      </div>
+
+      <div class="form-section">
+        <label class="form-label">ご住所</label>
+        <div class="field-row" style="margin-bottom:0.5rem">
+          <select name="prefecture" id="prefecture">
+            <option value="">都道府県</option>
+            <option>北海道</option><option>青森県</option><option>岩手県</option><option>宮城県</option>
+            <option>秋田県</option><option>山形県</option><option>福島県</option><option>茨城県</option>
+            <option>栃木県</option><option>群馬県</option><option>埼玉県</option><option>千葉県</option>
+            <option>東京都</option><option>神奈川県</option><option>新潟県</option><option>富山県</option>
+            <option>石川県</option><option>福井県</option><option>山梨県</option><option>長野県</option>
+            <option>岐阜県</option><option>静岡県</option><option>愛知県</option><option>三重県</option>
+            <option>滋賀県</option><option>京都府</option><option>大阪府</option><option>兵庫県</option>
+            <option>奈良県</option><option>和歌山県</option><option>鳥取県</option><option>島根県</option>
+            <option>岡山県</option><option>広島県</option><option>山口県</option><option>徳島県</option>
+            <option>香川県</option><option>愛媛県</option><option>高知県</option><option>福岡県</option>
+            <option>佐賀県</option><option>長崎県</option><option>熊本県</option><option>大分県</option>
+            <option>宮崎県</option><option>鹿児島県</option><option>沖縄県</option>
+          </select>
+        </div>
+        <input type="text" name="city" id="city" placeholder="市区町村" style="margin-bottom:0.5rem">
+        <input type="text" name="address" id="address" placeholder="番地" style="margin-bottom:0.5rem">
+        <input type="text" name="building" id="building" placeholder="マンション・建物名など">
+      </div>
+
+      <!-- アレルギー -->
+      <div class="form-section">
+        <label class="form-label">アレルギーについて</label>
+        <p class="form-note">アレルギーなど食べられないものがございましたらご遠慮なくお書き添えください</p>
+        <textarea name="allergy" placeholder="例）甲殻類アレルギー" style="margin-top:0.5rem;min-height:70px"></textarea>
+      </div>
+
+      <!-- メッセージ -->
+      <div class="form-section">
+        <label class="form-label">新郎新婦へのメッセージ</label>
+        <textarea name="message" placeholder="おふたりへのメッセージをどうぞ"></textarea>
+      </div>
+
+      <!-- 送信 -->
+      <div class="submit-wrap">
+        <button type="submit" class="submit-btn"><span>回答を送信する</span></button>
+        <a href="index.html" class="back-link">← 招待状に戻る</a>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Confirmation -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+    </div>
+    <p class="confirm-title">Thank you</p>
+    <p class="confirm-text">
+      ご回答いただきありがとうございます<br>
+      お会いできることを楽しみにしております
+    </p>
+    <a href="index.html" class="confirm-back">← 招待状に戻る</a>
+  </div>
+
+  <script>
+    // Companion fields
+    let companionCount = 0;
+    const maxCompanions = 4;
+    const list = document.getElementById('companionList');
+    const addBtn = document.getElementById('addCompanion');
+
+    addBtn.addEventListener('click', () => {
+      if (companionCount >= maxCompanions) return;
+      companionCount++;
+      const row = document.createElement('div');
+      row.className = 'companion-row';
+      row.innerHTML = `
+        <input type="text" name="companion_${companionCount}" placeholder="ご連名のお名前">
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove();companionCount--;">×</button>
+      `;
+      list.appendChild(row);
+      if (companionCount >= maxCompanions) addBtn.style.display = 'none';
+    });
+
+    // Form submit → Google Spreadsheet
+    document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const btn = form.querySelector('.submit-btn');
+      btn.style.pointerEvents = 'none';
+      btn.querySelector('span').textContent = '送信中...';
+
+      // Collect companions
+      const companions = [];
+      form.querySelectorAll('[name^="companion_"]').forEach(el => {
+        if (el.value.trim()) companions.push(el.value.trim());
+      });
+
+      const data = {
+        attendance: form.attendance.value === 'attend' ? 'ご出席' : 'ご欠席',
+        last_name: form.last_name.value,
+        first_name: form.first_name.value,
+        last_name_kana: form.last_name_kana.value,
+        first_name_kana: form.first_name_kana.value,
+        companions: companions.join('、'),
+        side: form.side.value === 'groom' ? '新郎ゲスト' : '新婦ゲスト',
+        phone: form.phone.value,
+        email: form.email.value,
+        zipcode: form.zipcode.value,
+        prefecture: form.prefecture.value,
+        city: form.city.value,
+        address: form.address.value,
+        building: form.building.value,
+        allergy: form.allergy.value,
+        message: form.message.value
+      };
+
+      // ★ ここにApps ScriptのURLを貼り付けてください
+      const GAS_URL = 'https://script.google.com/macros/s/AKfycbzwqn2usOG-EOHKsnWch6nyn2xB1cF4fYaNHWLIoD4DRkVE55kKFDpUgnEwnqKVw0rI/exec';
+
+      try {
+        await fetch(GAS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      } catch (err) {
+        // no-cors mode won't return readable response, but data is sent
+      }
+
+      document.getElementById('confirmOverlay').classList.add('show');
+    });
+  </script>
+
+</body>
+</html>
